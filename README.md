@@ -61,7 +61,7 @@ Sartaj Sahni. (2005). Data Structures, Algorithms, and Applications. McGraw-Hill
 
 ⚙️ 3. Desain Sistem dan Implementasi
 
-<img width="842" height="1264" alt="FLOWCHART CANVAS" src="https://github.com/user-attachments/assets/fc628d3c-0209-483d-ae0b-136ac2db2117" />
+<img width="642" height="1064" alt="FLOWCHART CANVAS" src="https://github.com/user-attachments/assets/fc628d3c-0209-483d-ae0b-136ac2db2117" />
 
 Alur Kerja (Input → Proses → Output)
 
