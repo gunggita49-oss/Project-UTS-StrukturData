@@ -118,7 +118,6 @@ Sistem ini menggunakan **Doubly Linked List**, di mana:
 
 ## 📊 Diagram Alur (Mermaid)
 
-```mermaid
 graph TD
 
     A[Start] --> B[User melakukan aksi]
