@@ -1,35 +1,38 @@
 # 🎨 Creative Canvas History Manager
 
-### 📌 Rumusan Masalah dan Solusi
+## 📌 Rumusan Masalah dan Solusi
 
-**Rumusan Masalah:**
-
+### ❓ Rumusan Masalah
 1. Bagaimana mengoptimalkan penyimpanan riwayat aksi pada aplikasi desain tanpa membebani memori secara statis?
-
 2. Bagaimana memastikan alur navigasi Undo dan Redo berjalan sinkron secara dua arah?
-
 3. Bagaimana sistem menangani konflik riwayat (branching) saat pengguna melakukan aksi baru di posisi tengah riwayat?
 
-**Solusi Sistem:**
+### 💡 Solusi
+Sistem menggunakan **Doubly Linked List** untuk mengimplementasikan konsep **Stack (LIFO)**.  
+Setiap perubahan canvas disimpan dalam node yang bersifat dinamis.
 
-Sistem menggunakan Doubly Linked List untuk mengimplementasikan konsep Stack. Setiap perubahan status kanvas disimpan dalam sebuah node dinamis. Penggunaan dua pointer (prev dan next) memungkinkan navigasi dua arah yang instan. Untuk masalah percabangan, sistem secara otomatis menghapus node "masa depan" yang tidak valid saat ada input baru, memastikan integritas urutan aksi.
+- Pointer `prev` digunakan untuk **Undo**
+- Pointer `next` digunakan untuk **Redo**
+- Jika terjadi aksi baru di tengah history, sistem akan **menghapus semua redo (branching)**
 
 ---
 
-### 📚 Landasan Teori
+## 📚 Landasan Teori
 
-Struktur data adalah fondasi dalam pengorganisasian data di memori komputer agar proses manipulasi data menjadi lebih efisien. Pemilihan struktur data yang tepat sangat krusial dalam aplikasi yang memerlukan performa tinggi seperti editor grafis, di mana setiap detik interaksi pengguna harus tercatat dengan baik.
+Struktur data merupakan cara untuk mengorganisasi dan menyimpan data agar dapat diakses dan dimanipulasi secara efisien. Pemilihan struktur data sangat penting dalam aplikasi yang membutuhkan performa tinggi seperti editor grafis.
 
-Dalam proyek ini, diterapkan konsep **Stack (Tumpukan)** dengan prinsip **LIFO (Last-In-First-Out).** Meskipun secara tradisional Stack sering diasosiasikan dengan array, implementasi menggunakan **Linked List** menawarkan fleksibilitas alokasi memori dinamis. Hal ini sangat menguntungkan karena jumlah riwayat (history) tidak dibatasi oleh ukuran array statis di awal program.
+Stack adalah struktur data yang menggunakan prinsip **LIFO (Last In First Out)**, di mana data terakhir yang masuk akan menjadi yang pertama keluar. Konsep ini sangat cocok untuk fitur Undo.
 
-Secara spesifik, **Doubly Linked List** digunakan agar setiap node memiliki referensi ke langkah sebelumnya (Undo) dan langkah sesudahnya (Redo). Navigasi ini memungkinkan kompleksitas waktu untuk berpindah antar status, yang jauh lebih efisien dibandingkan melakukan pencarian pada array besar.
+Namun, implementasi Stack menggunakan **Doubly Linked List** memberikan fleksibilitas lebih karena:
+- Alokasi memori dinamis
+- Mendukung navigasi dua arah (Undo dan Redo)
 
-**Sumber Ilmiah:**
-* Cormen, T. H., et al. (2022). Introduction to Algorithms. MIT Press. (Membahas efisiensi Stack dalam manajemen memori).
+Dalam sistem ini, Linked List digunakan agar setiap node memiliki referensi ke node sebelumnya (`prev`) dan berikutnya (`next`).
 
-* Aho, A. V., & Ullman, J. D. (1983). Data Structures and Algorithms. Addison-Wesley. (Konsep dasar Linked List).
-
-* Sartaj Sahni. (2005). Data Structures, Algorithms, and Applications. McGraw-Hill. (Penerapan struktur data pada aplikasi nyata).
+### 📖 Sumber Ilmiah
+- Cormen, T. H., et al. (2022). *Introduction to Algorithms*. MIT Press.
+- Aho, A. V., & Ullman, J. D. (1983). *Data Structures and Algorithms*. Addison-Wesley.
+- Sahni, S. (2005). *Data Structures, Algorithms, and Applications*. McGraw-Hill.
 
 ---
 
@@ -92,27 +95,23 @@ Pengguna melakukan aksi pada aplikasi:
 
 ## 🔗 Struktur Data yang Digunakan
 
-Sistem ini menggunakan **Doubly Linked List**, di mana:
-- Setiap node memiliki pointer:
-  - `prev` → ke node sebelumnya (Undo)
-  - `next` → ke node berikutnya (Redo)
-- Pointer `current` menunjukkan posisi state saat ini
+Menggunakan **Doubly Linked List**:
+
+- `prev` → untuk Undo
+- `next` → untuk Redo
+- `current` → posisi saat ini
+
+📌 Catatan:
+Meskipun konsepnya Stack (LIFO), implementasi menggunakan Doubly Linked List agar mendukung Redo.
 
 ---
 
 ## 🔄 Operasi Utama
 
-- **Push (Tambah Aksi)**  
-  Menambahkan node baru ke dalam history
-
-- **Undo (Move Backward)**  
-  Memindahkan pointer ke node sebelumnya (`prev`)
-
-- **Redo (Move Forward)**  
-  Memindahkan pointer ke node berikutnya (`next`)
-
-- **Traverse / Display**  
-  Menampilkan seluruh history dari `head` hingga akhir
+- **Push** → Menambahkan aksi baru
+- **Pop (Undo)** → Kembali ke state sebelumnya
+- **Peek (Redo)** → Melihat/mengakses state berikutnya
+- **Display** → Menampilkan seluruh history
 
 ---
 
@@ -156,11 +155,21 @@ Implementasi menggunakan bahasa pemrograman Python dengan struktur class yang mo
 ### 💡 Contoh Struktur Sederhana
 
 class Node:
-
-    def __init__(self, data):
-        self.data = data
+    def __init__(self, action, canvas_state=None):
+        self.action = action
+        self.canvas_state = canvas_state
         self.prev = None
         self.next = None
+
+class HistoryManager:
+    def push(self):
+        pass
+
+    def undo(self):
+        pass
+
+    def redo(self):
+        pass
 
 class CanvasHistory:
 
@@ -173,8 +182,7 @@ class CanvasHistory:
 
 Berdasarkan hasil pengembangan, dapat disimpulkan bahwa:
 
-1. Rumusan masalah terselesaikan: Sistem mampu mengelola riwayat tanpa batas statis dan menangani percabangan aksi dengan tepat.
-
-2. Kesesuaian Teori: Implementasi Stack melalui Doubly Linked List terbukti sangat efektif untuk fitur navigasi dua arah sesuai prinsip LIFO.
-
-3. Manfaat: Pengguna mendapatkan pengalaman editing yang aman karena setiap kesalahan dapat dibatalkan (Undo) atau dikembalikan (Redo) secara instan.
+1. Sistem berhasil mengelola riwayat aksi secara dinamis tanpa batasan ukuran statis.
+2. Implementasi sesuai dengan konsep Stack (LIFO) menggunakan Doubly Linked List.
+3. Sistem mampu menangani Undo, Redo, dan branching dengan baik.
+4. Penggunaan struktur data ini memberikan efisiensi serta pengalaman pengguna yang lebih aman dalam proses editing.
