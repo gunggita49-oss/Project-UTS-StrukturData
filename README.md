@@ -37,41 +37,114 @@ Secara spesifik, **Doubly Linked List** digunakan agar setiap node memiliki refe
 
 <img src="https://github.com/user-attachments/assets/fc628d3c-0209-483d-ae0b-136ac2db2117" width="50%" alt="FLOWCHART CANVAS" />
 
-Alur Kerja (Input → Proses → Output)
+## 📌 Alur Kerja Sistem (Input → Proses → Output)
 
-* Input: Pengguna melakukan aksi (misal: "Draw Circle", "Change Color").
+### 📥 Input
+Pengguna melakukan aksi pada aplikasi:
+- Menambah objek (Persegi / Lingkar)
+- Undo
+- Redo
 
-* Proses: - Aksi dibungkus ke dalam Node.
+---
 
-Melakukan operasi Push ke dalam Doubly Linked List.
+### ⚙️ Proses
 
-Jika posisi bukan di akhir, potong jalur next.
+#### 🟢 Aksi Baru (Push)
+1. Sistem membuat **Node baru** yang berisi:
+   - `action` (nama aksi)
+   - `canvas_state` (snapshot kondisi canvas)
+2. Jika posisi `current` **tidak di akhir**:
+   - Sistem menghapus semua node setelah `current` (**branching / hapus redo**)
+3. Node baru disambungkan ke linked list:
+   - `current.next = new_node`
+   - `new_node.prev = current`
+4. Pointer diperbarui:
+   - `current = new_node`
 
-Update pointer current ke node terbaru.
+---
 
-* Output: Visualisasi status kanvas saat ini sesuai posisi pointer.
+#### 🟡 Undo
+1. Sistem mengecek apakah ada node sebelumnya:
+   - Jika ada → `current = current.prev`
+2. Sistem melakukan **restore canvas** berdasarkan `canvas_state`
 
-Operasi Minimal (Stack)
+---
 
-Push: Menambahkan status baru ke dalam riwayat.
+#### 🔵 Redo
+1. Sistem mengecek apakah ada node berikutnya:
+   - Jika ada → `current = current.next`
+2. Sistem melakukan **restore canvas**
 
-Pop (Undo): Mengambil status sebelumnya dan memindahkan pointer ke belakang.
+---
 
-Peek (Redo): Melihat status berikutnya dan memindahkan pointer ke depan.
+#### 🟣 Restore State
+- Menghapus semua objek pada canvas
+- Menggambar ulang objek berdasarkan `canvas_state` dari node saat ini
 
-Display: Menampilkan seluruh urutan riwayat yang tersimpan di memori.
+---
 
-Diagram Proses (Mermaid)
+### 📤 Output
+- Tampilan canvas berubah sesuai posisi `current`
+- History ditampilkan dan diperbarui
+- Posisi saat ini ditandai pada history
 
-graph LR
+---
 
-    A[Start] --> B[Aksi Baru]
-    B --> C{Posisi Current?}
-    C -- Di Tengah --> D[Hapus Node Depan]
-    C -- Di Akhir --> E[Tambah Node Baru]
-    D --> E
-    E --> F[Update Current Pointer]
-    F --> G[End]
+## 🔗 Struktur Data yang Digunakan
+
+Sistem ini menggunakan **Doubly Linked List**, di mana:
+- Setiap node memiliki pointer:
+  - `prev` → ke node sebelumnya (Undo)
+  - `next` → ke node berikutnya (Redo)
+- Pointer `current` menunjukkan posisi state saat ini
+
+---
+
+## 🔄 Operasi Utama
+
+- **Push (Tambah Aksi)**  
+  Menambahkan node baru ke dalam history
+
+- **Undo (Move Backward)**  
+  Memindahkan pointer ke node sebelumnya (`prev`)
+
+- **Redo (Move Forward)**  
+  Memindahkan pointer ke node berikutnya (`next`)
+
+- **Traverse / Display**  
+  Menampilkan seluruh history dari `head` hingga akhir
+
+---
+
+## 📊 Diagram Alur (Mermaid)
+
+```mermaid
+graph TD
+
+    A[Start] --> B[User melakukan aksi]
+
+    B --> C{Aksi Baru?}
+
+    C -- YA --> D[Buat Node Baru]
+    D --> E{Apakah ada next?}
+
+    E -- YA --> F[Hapus semua redo]
+    E -- TIDAK --> G[Sambungkan Node Baru]
+
+    F --> G
+    G --> H[Update current ke node baru]
+    H --> I[Tampilkan History]
+
+    C -- TIDAK --> J{Undo atau Redo?}
+
+    J -- Undo --> K[Current = Prev]
+    J -- Redo --> L[Current = Next]
+
+    K --> M[Restore Canvas]
+    L --> M
+
+    M --> I
+    I --> N[End]
 
 ---
 
