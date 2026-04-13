@@ -152,8 +152,9 @@ Implementasi menggunakan bahasa pemrograman Python dengan struktur class yang mo
 
 ---
 
-### 💡 Contoh Struktur Sederhana
+Contoh struktur utama:
 
+```python
 class Node:
     def __init__(self, action, canvas_state=None):
         self.action = action
@@ -170,7 +171,7 @@ class HistoryManager:
 
     def redo(self):
         pass
-
+```
 class CanvasHistory:
 
     # Logika Push, Undo, Redo, Display berada di sini
